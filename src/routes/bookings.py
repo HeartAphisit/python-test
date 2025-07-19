@@ -19,7 +19,6 @@ def create_booking(
     current_user: User = Depends(get_current_user)
 ):
     """Create a new booking for the authenticated user"""
-
     # Create new booking associated with the current user
     db_booking = Booking(
         user_id=current_user.id,
@@ -47,15 +46,10 @@ def read_bookings(
     - Regular users can only see their own bookings
     """
     if current_user.role == UserRole.admin:
-        logger.info(f"Admin {current_user.username} is fetching all bookings")
-
         bookings = session.exec(
             select(Booking).offset(skip).limit(limit)
         ).all()
     else:
-        logger.info(
-            f"User {current_user.username} is fetching only their own bookings")
-
         bookings = session.exec(
             select(Booking)
             .where(Booking.user_id == current_user.id)
@@ -81,10 +75,6 @@ def read_all_bookings_with_users(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Only admin users can view all bookings with user details"
         )
-
-    logger.info(
-        f"Admin {current_user.username} is fetching all bookings with user details")
-
     # Join query to get bookings with user information
     statement = (
         select(Booking, User)
@@ -207,14 +197,8 @@ def delete_booking(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You can only delete your own bookings"
         )
-
-    logger.info(
-        f"User {current_user.username} is deleting booking ID: {booking_id}")
-
     session.delete(booking)
     session.commit()
-
-    logger.info(f"Booking {booking_id} deleted successfully")
 
 
 @router.get("/user/{user_id}", response_model=List[BookingRead])
