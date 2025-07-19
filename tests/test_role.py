@@ -62,7 +62,7 @@ def users_fixture(session: Session):
     return {"admin": admin_user, "user": regular_user}
 
 
-# 1. Test login functionality with different user credentials
+# Test login functionality with different user credentials
 def test_login_with_different_credentials(client: TestClient, users):
     """Test login with admin and regular user credentials"""
 
@@ -90,7 +90,7 @@ def test_login_with_different_credentials(client: TestClient, users):
     assert invalid_response.status_code == 401
 
 
-# 2. Test booking functionality for both admin and non-admin users
+# Test booking functionality for both admin and non-admin users
 def test_booking_functionality_for_different_users(client: TestClient, users, session: Session):
     """Test that both admin and regular users can create bookings"""
 
@@ -124,7 +124,7 @@ def test_booking_functionality_for_different_users(client: TestClient, users, se
     assert user_booking.json()["booking_date"] == "2pm-3pm"
 
 
-# 3. Test that admin can view all bookings while regular users can only see their own
+# Test that admin can view all bookings while regular users can only see their own
 def test_admin_vs_user_booking_access(client: TestClient, users, session: Session):
     """Test role-based access to bookings"""
 

@@ -8,9 +8,6 @@ from ..models import (
     User, UserRole, BookingReadWithUser
 )
 from ..dependencies import get_current_user
-import logging
-
-logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/bookings", tags=["bookings"])
 
@@ -22,7 +19,6 @@ def create_booking(
     current_user: User = Depends(get_current_user)
 ):
     """Create a new booking for the authenticated user"""
-    logger.info(f"User {current_user.username} is creating a booking")
 
     # Create new booking associated with the current user
     db_booking = Booking(
@@ -34,8 +30,6 @@ def create_booking(
     session.add(db_booking)
     session.commit()
     session.refresh(db_booking)
-
-    logger.info(f"Booking {db_booking.id} created successfully")
 
     return db_booking
 
@@ -143,9 +137,6 @@ def read_booking(
             detail="You can only access your own bookings"
         )
 
-    logger.info(
-        f"User {current_user.username} is fetching booking ID: {booking_id}")
-
     return booking
 
 
@@ -175,9 +166,6 @@ def update_booking(
             detail="You can only update your own bookings"
         )
 
-    logger.info(
-        f"User {current_user.username} is updating booking ID: {booking_id}")
-
     # Update fields if provided
     booking_data = booking_update.model_dump(exclude_unset=True)
 
@@ -191,9 +179,6 @@ def update_booking(
     session.add(booking)
     session.commit()
     session.refresh(booking)
-
-    logger.info(f"Booking {booking_id} updated successfully")
-    print(f"✅ Booking {booking_id} updated successfully")
 
     return booking
 
@@ -256,9 +241,6 @@ def read_user_bookings(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
         )
-
-    logger.info(
-        f"Admin {current_user.username} is fetching bookings for user ID: {user_id}")
 
     bookings = session.exec(
         select(Booking)

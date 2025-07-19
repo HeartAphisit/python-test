@@ -60,7 +60,6 @@ def read_users(
     current_user: User = Depends(get_current_user)
 ):
     """Get all users with pagination (requires authentication)"""
-    print(f"User {current_user.username} is fetching all users")
     users = session.exec(select(User).offset(skip).limit(limit)).all()
     return users
 
@@ -73,7 +72,6 @@ def read_user(
 ):
     """Get a specific user by ID (requires authentication)"""
     user = session.get(User, user_id)
-    print(f"User {current_user.username} is fetching user ID: {user_id}")
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
