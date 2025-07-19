@@ -1,0 +1,17 @@
+bcrypt==4.0.1
+cryptography
+fastapi
+sqlmodel
+psycopg2-binary
+python-jose
+python-multipart
+python-dotenv
+SQLAlchemy
+uvicorn
+passlib
+pytest
+httpx
+pytest-asyncio
+aiofiles
+jinja2
+pyjwt
